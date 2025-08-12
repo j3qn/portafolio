@@ -1,0 +1,30 @@
+---
+export interface Props {
+  id: string;
+  Component: any; 
+}
+
+import '../styles/markdown.css';
+const { id, Component } = Astro.props;
+---
+
+<div 
+  id={id} 
+  class="fixed inset-0 bg-black/60 z-50 hidden overflow-y-auto"
+>
+  <!-- wrapper interno para centrar horizontalmente -->
+  <div class="py-10 flex justify-center">
+    <div class="bg-neutral-900 p-6 rounded-lg max-w-2xl w-full text-white relative">
+      <button
+        class="absolute top-3 right-3 text-neutral-400 hover:text-neutral-100 text-lg"
+        onclick={`document.getElementById('${id}').classList.add('hidden'); document.body.classList.remove('overflow-hidden');`}
+      >
+        ✕
+      </button>
+
+      <div class="markdown-content">
+        <Component />
+      </div>
+    </div>
+  </div>
+</div>

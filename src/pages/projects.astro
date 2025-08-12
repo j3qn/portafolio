@@ -1,0 +1,47 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import ProjectModal from "../components/ProjectModal.astro";
+
+import OceanWeb from "../content/ocean_web.mdx";
+import StormWeb from "../content/storm_web.mdx";
+import TangoWeb from "../content/tango_web.mdx";
+---
+
+<Layout>
+  <main class="flex flex-col items-center min-h-screen">
+    <div class="max-w-4xl px-14 border-x min-h-screen border-neutral-900 container">
+      <div class="w-full gap-y-3 mt-12 flex flex-col">
+        <h1 class="text-2xl font-semibold text-neutral-100 ">Projects</h1>
+        <p class="text-neutral-600 mb-4">(Click on cards to see more information about the project)</p>
+
+        <ProjectCard
+          title="Ocean Web"
+          href="https://anticheat.ac"
+          description="The most powerful Screenshare Tool for Anti-Cheat (FiveM, Minecraft, etc.)"
+          tags={["Flask", "React", "TailwindCSS", "MongoDB"]}
+          modalId="modal-ocean"
+        />
+        <ProjectModal  id="modal-ocean" Component={OceanWeb}  />
+
+        <ProjectCard
+          title="Storm Web"
+          href="https://stormss.cc"
+          description="Screenshare Tool Based on FiveM"
+          tags={["Flask", "Astro", "TailwindCSS", "MySQL"]}
+          modalId="modal-storm"
+        />
+        <ProjectModal  id="modal-storm" Component={StormWeb}  />
+
+         <ProjectCard
+          title="Tango Client Web"
+          href="https://tangoclient.com"
+          description="1.8.9 Minecraft Internal Client"
+          tags={["Flask", "Astro", "TailwindCSS", "MySQL"]}
+          modalId="modal-tango"
+        />
+        <ProjectModal  id="modal-tango" Component={TangoWeb}  />
+      </div>
+    </div>
+  </main>
+</Layout>

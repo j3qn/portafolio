@@ -1,0 +1,36 @@
+---
+// src/components/ui/ProjectCard.astro
+export interface Props {
+  title: string;
+  href: string;
+  description: string;
+  tags: string[];
+  modalId: string;
+}
+
+const { title, href, description, tags, modalId } = Astro.props;
+---
+
+<div
+  onclick={`document.getElementById('${modalId}').classList.remove('hidden'); document.body.classList.add('overflow-hidden');`}
+  class="w-full transition-all duration-300 cursor-pointer hover:bg-white/[1%] px-3 py-3.5 rounded-xl border border-neutral-900"
+>
+
+<div class="flex">
+  <a href={href} target="_blank" onclick="event.stopPropagation()" class="text-md flex  gap-x-1 group hover:text-neutral-100 duration-300 transition-all items-center font-medium text-neutral-200">
+    {title}
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide size-4 duration-300 transition-all text-neutral-400 group-hover:text-neutral-100 group-hover:translate-x-[2px]">
+      <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+    </svg>
+  </a>
+</div>
+  <div class="mt-2">
+    <p class="text-neutral-400 text-sm">{description}</p>
+  </div>
+
+  <footer class="flex flex-row items-center gap-x-2 mt-2">
+    {tags.map(tag => (
+      <span class="px-2.5 py-0.5 bg-white/[2%] rounded-lg border border-white/5 text-sm font-medium text-neutral-400">{tag}</span>
+    ))}
+  </footer>
+</div>

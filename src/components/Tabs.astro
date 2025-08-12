@@ -1,0 +1,122 @@
+---
+// Tabs.astro
+export interface Props {
+  tabs: {
+    id: string;
+    label: string;
+    icon?: any | string; 
+    active?: boolean;
+  }[];
+  class?: string;
+}
+
+const { tabs, class: className = '' } = Astro.props;
+
+const activeTabId = tabs.find(tab => tab.active)?.id || tabs[0]?.id;
+---
+
+<div class={`w-full ${className}`} data-tabs-container>
+
+  <div class="flex flex-wrap gap-x-4 gap-y-2 sm:space-x-6 mb-4">
+    {tabs.map((tab) => (
+      <button
+        class={`py-2 px-2 sm:py-3 bg-transparent cursor-pointer text-sm sm:text-base text-neutral-300 border-b-2 border-transparent transition-all duration-200 flex items-center gap-2 ${
+          tab.id === activeTabId ? 'border-white text-white font-medium' : ''
+        }`}
+        data-tab={tab.id}
+        type="button"
+      >
+        {tab.icon && (
+          typeof tab.icon === 'string' ? (
+            <span 
+              set:html={tab.icon} 
+              class={`flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 ${tab.id === activeTabId ? 'text-white' : 'text-neutral-400'}`}
+            />
+          ) : (
+            <tab.icon size={16} class={`flex-shrink-0 ${tab.id === activeTabId ? 'text-white' : 'text-neutral-400'}`} />
+          )
+        )}
+        <span>{tab.label}</span>
+      </button>
+    ))}
+  </div>
+
+
+  <div class="w-full" data-tabs-content>
+    <slot />
+  </div>
+</div>
+
+
+
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabContainers = document.querySelectorAll('[data-tabs-container]');
+    
+    tabContainers.forEach(container => {
+      const tabButtons = container.querySelectorAll('[data-tab]');
+      const tabContent = container.querySelector('[data-tabs-content]');
+      const tabPanels = tabContent?.querySelectorAll('[data-tab-content]') || [];
+
+      tabPanels.forEach(panel => {
+        panel.classList.add('hidden');
+      });
+      
+     
+      const activeButton = Array.from(tabButtons).find(btn => 
+        btn.classList.contains('border-white')
+      );
+      const activeTabId = activeButton?.getAttribute('data-tab');
+      if (activeTabId) {
+        const activePanel = tabContent?.querySelector(`[data-tab-content="${activeTabId}"]`);
+        if (activePanel) {
+          activePanel.classList.remove('hidden');
+          activePanel.classList.add('block');
+        }
+      }
+      
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const tabId = button.getAttribute('data-tab');
+          
+  
+          tabButtons.forEach(btn => {
+            btn.classList.remove('border-white', 'text-white');
+            btn.classList.add('text-neutral-300', 'border-transparent');
+    
+            const iconContainer = btn.querySelector('span[class*="flex-shrink-0"]') || btn.querySelector('svg');
+            if (iconContainer) {
+              iconContainer.classList.remove('text-white');
+              iconContainer.classList.add('text-neutral-400');
+            }
+          });
+          
+
+          tabPanels.forEach(panel => {
+            panel.classList.add('hidden');
+            panel.classList.remove('block');
+          });
+          
+
+          button.classList.remove('text-neutral-300', 'border-transparent');
+          button.classList.add('border-white', 'text-white');
+
+          const activeIconContainer = button.querySelector('span[class*="flex-shrink-0"]') || button.querySelector('svg');
+          if (activeIconContainer) {
+            activeIconContainer.classList.remove('text-neutral-400');
+            activeIconContainer.classList.add('text-white');
+          }
+          
+
+          const targetPanel = tabContent?.querySelector(`[data-tab-content="${tabId}"]`);
+          if (targetPanel) {
+            targetPanel.classList.remove('hidden');
+            targetPanel.classList.add('block');
+          }
+        });
+      });
+    });
+  });
+</script>
